@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 offset-lg-2">
+        <div class="card shadow">
+            <div class="card-header {% if prediction == 1 %}bg-danger{% else %}bg-success{% endif %} text-white">
+                <h2 class="mb-0">Heart Disease Prediction Results</h2>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <h3>Prediction Result</h3>
+                    
+                    {% if prediction == 1 %}
+                        <div class="alert alert-danger">
+                            <h4 class="alert-heading">High Risk of Heart Disease</h4>
+                            <p>The patient has a {{ probability }}% probability of having heart disease.</p>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-success">
+                            <h4 class="alert-heading">Low Risk of Heart Disease</h4>
+                            <p>The patient has a {{ probability }}% probability of having heart disease.</p>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h4>Risk Assessment</h4>
+                        <div class="progress" style="height: 25px;">
+                            <div class="progress-bar {% if probability < 30 %}bg-success{% elif probability < 70 %}bg-warning{% else %}bg-danger{% endif %}" 
+                                 role="progressbar" 
+                                 style="width: {{ probability }}%;" 
+                                 aria-valuenow="{{ probability }}" 
+                                 aria-valuemin="0" 
+                                 aria-valuemax="100">
+                                {{ probability }}%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h4>Patient Information</h4>
+                        <table class="table table-striped">
+                            <tbody>
+                                <tr>
+                                    <th>Age</th>
+                                    <td>{{ data.age }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Sex</th>
+                                    <td>{% if data.sex == 1 %}Male{% else %}Female{% endif %}</td>
+                                </tr>
+                                <tr>
+                                    <th>Chest Pain Type</th>
+                                    <td>
+                                        {% if data.cp == 0 %}Typical Angina
+                                        {% elif data.cp == 1 %}Atypical Angina
+                                        {% elif data.cp == 2 %}Non-anginal Pain
+                                        {% else %}Asymptomatic
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Resting Blood Pressure</th>
+                                    <td>{{ data.trestbps }} mmHg</td>
+                                </tr>
+                                <tr>
+                                    <th>Serum Cholesterol</th>
+                                    <td>{{ data.chol }} mg/dl</td>
+                                </tr>
+                                <tr>
+                                    <th>Fasting Blood Sugar</th>
+                                    <td>
+                                        {% if data.fbs == 1 %}
+                                            > 120 mg/dl
+                                        {% else %}
+                                            <= 120 mg/dl
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Resting ECG</th>
+                                    <td>
+                                        {% if data.restecg == 0 %}Normal
+                                        {% elif data.restecg == 1 %}ST-T Wave Abnormality
+                                        {% else %}Left Ventricular Hypertrophy
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Maximum Heart Rate</th>
+                                    <td>{{ data.thalach }} bpm</td>
+                                </tr>
+                                <tr>
+                                    <th>Exercise Induced Angina</th>
+                                    <td>{% if data.exang == 1 %}Yes{% else %}No{% endif %}</td>
+                                </tr>
+                                <tr>
+                                    <th>ST Depression</th>
+                                    <td>{{ data.oldpeak }}</td>
+                                </tr>
+                                <tr>
+                                    <th>ST Slope</th>
+                                    <td>
+                                        {% if data.slope == 0 %}Upsloping
+                                        {% elif data.slope == 1 %}Flat
+                                        {% else %}Downsloping
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Number of Major Vessels</th>
+                                    <td>{{ data.ca }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Thalassemia</th>
+                                    <td>
+                                        {% if data.thal == 1 %}Normal
+                                        {% elif data.thal == 2 %}Fixed Defect
+                                        {% else %}Reversible Defect
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="d-grid">
+                            <a href="{{ url_for('main.predict') }}" class="btn btn-secondary">Make Another Prediction</a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-grid">
+                            <button class="btn btn-primary" onclick="window.print()">Print Results</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

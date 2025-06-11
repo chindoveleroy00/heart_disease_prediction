@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 offset-md-3 text-center">
+        <div class="card shadow-lg p-4 mb-5 bg-white rounded">
+            <div class="card-body">
+                <h1 class="display-4 mb-4">Heart Disease Prediction</h1>
+                <p class="lead">A machine learning approach for early detection of heart disease at Parirenyatwa Group of Hospitals, Zimbabwe.</p>
+                <hr class="my-4">
+                <p>Heart disease remains a significant health challenge in Zimbabwe. This tool uses machine learning to predict the risk of heart disease based on clinical and lifestyle factors.</p>
+                <div class="d-grid gap-2 col-6 mx-auto mt-4">
+                    <a href="{{ url_for('main.predict') }}" class="btn btn-primary btn-lg">Start Prediction</a>
+                    <a href="{{ url_for('main.about') }}" class="btn btn-outline-secondary">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-4">
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <h3 class="card-title">Early Detection</h3>
+                <p class="card-text">Identify heart disease risk factors before symptoms develop, enabling timely intervention and better patient outcomes.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <h3 class="card-title">Data-Driven</h3>
+                <p class="card-text">Utilizing machine learning algorithms trained on patient data to provide accurate risk assessments tailored to Zimbabwe's population.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <h3 class="card-title">Healthcare Innovation</h3>
+                <p class="card-text">Pioneering the use of predictive analytics in Zimbabwe's healthcare system to improve resource allocation and patient care.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

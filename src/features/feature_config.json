@@ -1,0 +1,25 @@
+{
+  "core_features": [
+    "age",
+    "sex",
+    "systolic_bp",
+    "diastolic_bp",
+    "resting_heart_rate",
+    "total_cholesterol",
+    "hdl",
+    "ldl",
+    "fasting_glucose",
+    "bmi",
+    "smoking_status",
+    "exercise_induced_angina",
+    "st_depression"
+  ],
+  "derived_features": [
+    "age_decile",
+    "chol_ratio",
+    "bmi_category",
+    "bp_category",
+    "mean_arterial_pressure",
+    "rate_pressure_product"
+  ]
+}
