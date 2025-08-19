@@ -240,9 +240,13 @@ def analyze_feature_importance(model, X_train):
 def save_model(model, path):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     print(f"\nSaving model to {path}...")
-    joblib.dump(model, path)
-    print("Model saved successfully!")
-
+    try:
+        # Use protocol=4 for better compatibility
+        joblib.dump(model, path, protocol=4, compress=('zlib', 3))
+        print("Model saved successfully!")
+    except Exception as e:
+        print(f"Error saving model: {str(e)}")
+        raise
 
 def main():
     try:

@@ -1,148 +1,196 @@
+<!-- app/templates/results.html - Fixed variable names and added interpretation -->
 {% extends 'base.html' %}
 
+{% block title %}Prediction Results{% endblock %}
+
 {% block content %}
-<div class="row">
-    <div class="col-lg-8 offset-lg-2">
-        <div class="card shadow">
-            <div class="card-header {% if prediction == 1 %}bg-danger{% else %}bg-success{% endif %} text-white">
-                <h2 class="mb-0">Heart Disease Prediction Results</h2>
-            </div>
-            <div class="card-body">
-                <div class="text-center mb-4">
-                    <h3>Prediction Result</h3>
-                    
+<div class="container mt-4">
+    <h2>Heart Disease Prediction Results</h2>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Prediction Results</h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-{{ 'danger' if prediction == 1 else 'success' }}">
+                        <h5>Risk Level: {{ risk_level }}</h5>
+                        <p><strong>Confidence: {{ "%.1f"|format(probability) }}%</strong></p>
+                    </div>
+
+                    {% if interpretation %}
+                        <div class="alert alert-info">
+                            <h6>Medical Interpretation:</h6>
+                            <p>{{ interpretation }}</p>
+                        </div>
+                    {% endif %}
+
                     {% if prediction == 1 %}
-                        <div class="alert alert-danger">
-                            <h4 class="alert-heading">High Risk of Heart Disease</h4>
-                            <p>The patient has a {{ probability }}% probability of having heart disease.</p>
+                        <div class="alert alert-warning">
+                            <strong>⚠️ Higher Risk Detected</strong>
+                            <p>The model indicates an elevated risk of heart disease. It's recommended to:</p>
+                            <ul>
+                                <li>Consult with a healthcare professional immediately</li>
+                                <li>Discuss these results with your doctor</li>
+                                <li>Consider additional cardiac screening tests</li>
+                                <li>Review and modify lifestyle factors as recommended</li>
+                            </ul>
                         </div>
                     {% else %}
                         <div class="alert alert-success">
-                            <h4 class="alert-heading">Low Risk of Heart Disease</h4>
-                            <p>The patient has a {{ probability }}% probability of having heart disease.</p>
+                            <strong>✅ Lower Risk Detected</strong>
+                            <p>The model indicates a lower risk of heart disease. Continue to:</p>
+                            <ul>
+                                <li>Maintain a healthy lifestyle</li>
+                                <li>Have regular check-ups with your healthcare provider</li>
+                                <li>Keep monitoring your health metrics</li>
+                                <li>Stay physically active and eat a balanced diet</li>
+                            </ul>
                         </div>
                     {% endif %}
-                </div>
-                
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <h4>Risk Assessment</h4>
-                        <div class="progress" style="height: 25px;">
-                            <div class="progress-bar {% if probability < 30 %}bg-success{% elif probability < 70 %}bg-warning{% else %}bg-danger{% endif %}" 
-                                 role="progressbar" 
-                                 style="width: {{ probability }}%;" 
-                                 aria-valuenow="{{ probability }}" 
-                                 aria-valuemin="0" 
-                                 aria-valuemax="100">
-                                {{ probability }}%
-                            </div>
-                        </div>
+
+                    <div class="mt-3">
+                        <small class="text-muted">
+                            <i class="fas fa-clock"></i> Prediction generated on: <span id="prediction-time"></span>
+                            {% if prediction_id %}
+                            (ID: {{ prediction_id }})
+                            {% endif %}
+                        </small>
                     </div>
                 </div>
-                
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <h4>Patient Information</h4>
-                        <table class="table table-striped">
-                            <tbody>
-                                <tr>
-                                    <th>Age</th>
-                                    <td>{{ data.age }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Sex</th>
-                                    <td>{% if data.sex == 1 %}Male{% else %}Female{% endif %}</td>
-                                </tr>
-                                <tr>
-                                    <th>Chest Pain Type</th>
-                                    <td>
-                                        {% if data.cp == 0 %}Typical Angina
-                                        {% elif data.cp == 1 %}Atypical Angina
-                                        {% elif data.cp == 2 %}Non-anginal Pain
-                                        {% else %}Asymptomatic
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Resting Blood Pressure</th>
-                                    <td>{{ data.trestbps }} mmHg</td>
-                                </tr>
-                                <tr>
-                                    <th>Serum Cholesterol</th>
-                                    <td>{{ data.chol }} mg/dl</td>
-                                </tr>
-                                <tr>
-                                    <th>Fasting Blood Sugar</th>
-                                    <td>
-                                        {% if data.fbs == 1 %}
-                                            > 120 mg/dl
+            </div>
+
+            <!-- Risk Level Explanation -->
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6>Understanding Risk Levels</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <small>
+                                <strong>Very Low (0-20%):</strong> Minimal risk<br>
+                                <strong>Low (20-40%):</strong> Below average risk<br>
+                                <strong>Moderate (40-60%):</strong> Average risk
+                            </small>
+                        </div>
+                        <div class="col-sm-6">
+                            <small>
+                                <strong>High (60-80%):</strong> Above average risk<br>
+                                <strong>Very High (80-100%):</strong> Significant risk<br>
+                            </small>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <small class="text-muted">
+                            <strong>Current Risk Level: {{ risk_level }}</strong> ({{ "%.1f"|format(probability) }}% confidence)
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Input Summary</h5>
+                </div>
+                <div class="card-body" style="max-height: 400px; overflow-y: auto;">
+                    {% if form_data %}
+                        <div class="row">
+                            {% for key, value in form_data.items() %}
+                                <div class="col-12 mb-1">
+                                    <small>
+                                        <strong>{{ key.replace('_', ' ')|title }}:</strong>
+                                        {% if value is sameas true %}
+                                            Yes
+                                        {% elif value is sameas false %}
+                                            No
+                                        {% elif value is number %}
+                                            {{ value }}
                                         {% else %}
-                                            <= 120 mg/dl
+                                            {{ value }}
                                         {% endif %}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Resting ECG</th>
-                                    <td>
-                                        {% if data.restecg == 0 %}Normal
-                                        {% elif data.restecg == 1 %}ST-T Wave Abnormality
-                                        {% else %}Left Ventricular Hypertrophy
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Maximum Heart Rate</th>
-                                    <td>{{ data.thalach }} bpm</td>
-                                </tr>
-                                <tr>
-                                    <th>Exercise Induced Angina</th>
-                                    <td>{% if data.exang == 1 %}Yes{% else %}No{% endif %}</td>
-                                </tr>
-                                <tr>
-                                    <th>ST Depression</th>
-                                    <td>{{ data.oldpeak }}</td>
-                                </tr>
-                                <tr>
-                                    <th>ST Slope</th>
-                                    <td>
-                                        {% if data.slope == 0 %}Upsloping
-                                        {% elif data.slope == 1 %}Flat
-                                        {% else %}Downsloping
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Number of Major Vessels</th>
-                                    <td>{{ data.ca }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Thalassemia</th>
-                                    <td>
-                                        {% if data.thal == 1 %}Normal
-                                        {% elif data.thal == 2 %}Fixed Defect
-                                        {% else %}Reversible Defect
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                                    </small>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <small class="text-muted">Input data not available</small>
+                    {% endif %}
                 </div>
-                
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="d-grid">
-                            <a href="{{ url_for('main.predict') }}" class="btn btn-secondary">Make Another Prediction</a>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="d-grid">
-                            <button class="btn btn-primary" onclick="window.print()">Print Results</button>
-                        </div>
-                    </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="card mt-3">
+                <div class="card-body text-center">
+                    <a href="{{ url_for('main.predict') }}" class="btn btn-primary btn-sm mb-2">
+                        <i class="fas fa-plus"></i> New Prediction
+                    </a>
+                    <button class="btn btn-secondary btn-sm mb-2" onclick="window.print()">
+                        <i class="fas fa-print"></i> Print Results
+                    </button>
+                    <button class="btn btn-info btn-sm mb-2" onclick="saveResults()">
+                        <i class="fas fa-save"></i> Save Results
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Set the prediction timestamp
+    const now = new Date();
+    const timeString = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
+    document.getElementById('prediction-time').textContent = timeString;
+
+    // Store prediction data for potential use
+    const predictionData = {
+        prediction: {{ prediction }},
+        probability: {{ probability }},
+        riskLevel: '{{ risk_level }}',
+        interpretation: '{{ interpretation|e }}',
+        predictionId: {{ prediction_id or 'null' }}
+    };
+
+    console.log('Prediction data:', predictionData);
+
+    // Auto-focus on high-risk warnings
+    {% if prediction == 1 and probability > 70 %}
+    setTimeout(function() {
+        const highRiskAlert = document.querySelector('.alert-warning');
+        if (highRiskAlert) {
+            highRiskAlert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            highRiskAlert.style.border = '2px solid #ff6b6b';
+            setTimeout(() => {
+                highRiskAlert.style.border = '';
+            }, 3000);
+        }
+    }, 1000);
+    {% endif %}
+});
+
+function saveResults() {
+    // Implementation for saving results locally or to backend
+    const resultData = {
+        timestamp: new Date().toISOString(),
+        prediction: {{ prediction }},
+        probability: {{ probability }},
+        riskLevel: '{{ risk_level }}',
+        predictionId: {{ prediction_id or 'null' }}
+    };
+
+    // Save to localStorage
+    const savedResults = JSON.parse(localStorage.getItem('heartPredictions') || '[]');
+    savedResults.push(resultData);
+    localStorage.setItem('heartPredictions', JSON.stringify(savedResults));
+
+    alert('Results saved locally!');
+}
+</script>
 {% endblock %}

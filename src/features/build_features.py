@@ -144,8 +144,12 @@ def create_pca_features(df: pd.DataFrame, target_col: str = 'heart_disease',
     
     if model_path:
         os.makedirs(os.path.dirname(model_path), exist_ok=True)
-        joblib.dump(pca, model_path)
-        print(f"PCA model saved to {model_path}")
+        try:
+            joblib.dump(pca, model_path, protocol=4, compress=('zlib', 3))
+            print(f"PCA model saved to {model_path}")
+        except Exception as e:
+            print(f"Error saving PCA model: {str(e)}")
+            raise
     
     print(f"Created {n_components} PCA components explaining "
           f"{sum(pca.explained_variance_ratio_):.2%} variance")
