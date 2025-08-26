@@ -9,7 +9,7 @@ project_root = Path(__file__).parent.parent
 sys.path.append(str(project_root))
 
 from app import create_app
-from app.models import db, Prediction, PredictionSummary, ModelVersion
+from app.models import db, Prediction, PredictionSummary, ModelVersion, User
 from sqlalchemy import inspect
 
 def create_tables():
@@ -18,10 +18,50 @@ def create_tables():
 
     try:
         db.create_all()
-        print("✓ Database tables created successfully!")
+        print("✅ Database tables created successfully!")
         return True
     except Exception as e:
-        print(f"✗ Error creating database tables: {e}")
+        print(f"❌ Error creating database tables: {e}")
+        return False
+
+
+def seed_users():
+    """Seed initial user data"""
+    print("Seeding users...")
+
+    try:
+        # Check if users already exist
+        if User.query.first():
+            print("  Users already exist, skipping...")
+            return True
+
+        # Create initial admin user
+        admin = User(username="admin", email="admin@heartdisease.com", role="admin")
+        admin.set_password("admin123")  # Change this in production!
+        db.session.add(admin)
+
+        # Create initial analyst user
+        analyst = User(username="analyst", email="analyst@heartdisease.com", role="analyst")
+        analyst.set_password("analyst123")  # Change this in production!
+        db.session.add(analyst)
+
+        # Create a sample clinician user for testing
+        clinician = User(username="clinician1", email="clinician@heartdisease.com", role="clinician")
+        clinician.set_password("clinician123")  # Change this in production!
+        db.session.add(clinician)
+
+        db.session.commit()
+        print("✅ Users seeded successfully!")
+        print("   Default credentials:")
+        print("   Admin: admin / admin123")
+        print("   Analyst: analyst / analyst123")
+        print("   Clinician: clinician1 / clinician123")
+        print("   ⚠️  Please change these passwords in production!")
+        return True
+
+    except Exception as e:
+        print(f"❌ Error seeding users: {e}")
+        db.session.rollback()
         return False
 
 
@@ -53,11 +93,11 @@ def seed_model_versions():
         db.session.add(model_v1)
         db.session.commit()
 
-        print("✓ Model versions seeded successfully!")
+        print("✅ Model versions seeded successfully!")
         return True
 
     except Exception as e:
-        print(f"✗ Error seeding model versions: {e}")
+        print(f"❌ Error seeding model versions: {e}")
         db.session.rollback()
         return False
 
@@ -163,11 +203,11 @@ def seed_sample_predictions(num_samples=50):
             db.session.add(prediction)
 
         db.session.commit()
-        print(f"✓ {num_samples} sample predictions seeded successfully!")
+        print(f"✅ {num_samples} sample predictions seeded successfully!")
         return True
 
     except Exception as e:
-        print(f"✗ Error seeding sample predictions: {e}")
+        print(f"❌ Error seeding sample predictions: {e}")
         db.session.rollback()
         return False
 
@@ -237,11 +277,11 @@ def create_summary_data():
             db.session.add(summary)
 
         db.session.commit()
-        print("✓ Prediction summaries created successfully!")
+        print("✅ Prediction summaries created successfully!")
         return True
 
     except Exception as e:
-        print(f"✗ Error creating prediction summaries: {e}")
+        print(f"❌ Error creating prediction summaries: {e}")
         db.session.rollback()
         return False
 
@@ -252,21 +292,23 @@ def verify_database():
 
     try:
         inspector = inspect(db.engine)
-        expected_tables = ['predictions', 'prediction_summaries', 'model_versions']
+        expected_tables = ['users', 'predictions', 'prediction_summaries', 'model_versions']
 
         for table in expected_tables:
             if inspector.has_table(table):
-                print(f"✓ Table '{table}' exists")
+                print(f"✅ Table '{table}' exists")
             else:
-                print(f"✗ Table '{table}' missing")
+                print(f"❌ Table '{table}' missing")
                 return False
 
         # Check data counts
+        user_count = User.query.count()
         prediction_count = Prediction.query.count()
         summary_count = PredictionSummary.query.count()
         model_count = ModelVersion.query.count()
 
-        print(f"✓ Database contains:")
+        print(f"✅ Database contains:")
+        print(f"  - {user_count} users")
         print(f"  - {prediction_count} predictions")
         print(f"  - {summary_count} daily summaries")
         print(f"  - {model_count} model versions")
@@ -274,7 +316,7 @@ def verify_database():
         return True
 
     except Exception as e:
-        print(f"✗ Error verifying database: {e}")
+        print(f"❌ Error verifying database: {e}")
         return False
 
 
@@ -291,6 +333,10 @@ def main():
 
         # Create tables
         if not create_tables():
+            success = False
+
+        # Seed users first
+        if success and not seed_users():
             success = False
 
         # Seed model versions
@@ -312,12 +358,17 @@ def main():
 
         if success:
             print("\n" + "=" * 60)
-            print("✓ Database initialization completed successfully!")
+            print("✅ Database initialization completed successfully!")
+            print("\nDefault User Accounts Created:")
+            print("  Admin:     admin / admin123")
+            print("  Analyst:   analyst / analyst123") 
+            print("  Clinician: clinician1 / clinician123")
+            print("\n⚠️  IMPORTANT: Change these default passwords in production!")
             print("\nYou can now run the application with:")
             print("  python run.py")
         else:
             print("\n" + "=" * 60)
-            print("✗ Database initialization failed!")
+            print("❌ Database initialization failed!")
             sys.exit(1)
 
 

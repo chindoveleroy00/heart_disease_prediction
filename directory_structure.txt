@@ -1,15 +1,11 @@
 heart_disease_prediction/
-    .flaskenv
     .gitignore
-    cleanup.py
+    debug_auth.py
     directory_structure.txt
+    fix.py
     list_structure.py
-    quick_fix.py
     README.md
-    regenerate_models.py
     requirements.txt
-    run.py
-    test_fixes.py
     .git/
         COMMIT_EDITMSG
         config
@@ -46,39 +42,73 @@ heart_disease_prediction/
         objects/
             03/
                 f4a4962cc357a9be7b14977f9b01912dccfa7a
+            06/
+                79c5b224aa106251bec81792c64310f21de897
+            07/
+                c9e22bddba3f67c0cebd5840e7f6917412ea08
             08/
                 d5547894a07e81f120fde44167817e5d71cd74
+            09/
+                206295d876989beac8687d63545166a7535c1f
             10/
                 5ce2da2d6447d11dfe32bfb846c3d5b199fc99
+            15/
+                94cc520dde1099a1dfd11aece241d4396e5853
             17/
                 be185ca6f7c4fe9517af4bc5668adc3d3ff78e
             1f/
                 c6a70a92eec869fe8465ffe83b2f89889d77a5
             20/
                 3562bfa077a16fadd91e30a5a288cbf09feb6f
+                92d9d91f1282d8a64d3884910144f69f19ee7e
             24/
                 49caffbd5e197c9e5978b676df542235322ace
                 51543f19fc03941855d6d83269215be467456a
+                74c11aaefbe7ff960399e6d83265864313bb47
+                e93e37e2642dcf9cec122af9d00c09f5dde332
             26/
                 d33521af10bcc7fd8cea344038eaaeb78d0ef5
+            27/
+                64e27d58ecbec908cdbc9237ecb28ce6f9d1ae
             2a/
                 5ea0018ab24e8b978d29d84b01d2441209a863
+            2f/
+                7a0ed3fda0d93ce7c74be6dbb7f5291a853453
             31/
                 c232407da6129545681c269a5104eba43f5f51
             33/
                 6d607a78a07da70cdc0f3e25fcfad54d0b3a6a
                 92af8752b3caeae646426e3dddee240e529e94
                 acaef3e44b1ec1030a264f6c8ba6665a413cb2
+            35/
+                2b6eea636bf4f7c7f2c3104ba97087edb9be55
+                db073492741bbd3b250dc66bb09b172e75a8af
+                eb1ddfbbc029bcab630581847471d7f238ec53
             36/
                 d5663615af684c85b032adb968021c94a40fe4
+            39/
+                eceedbf46c4f32328d2e3f7e771421ae0d3749
+            3a/
+                79b278d60cf1e7ffd5f199da3e7c0553314370
             3d/
                 f3cc34c88dd00b574936fba7818e05780e3e18
+            3e/
+                9507eb8a153de0d35d5b1fac100cca1ce0eae8
+            40/
+                200c35374e80cf56184bbe933b9e44709732c6
             44/
                 f539b3ea23580cc8f3f7f921d96a430a958bbe
+            46/
+                2110db2731fd11d037a047fdd8b2d2fcbad76f
             4b/
                 94f45837fa8cb3deaf944c4e93a2ff03bc7f1c
                 dcfcb8ddf83909b37899b4a6cd01cf0932ea69
+                fa811977a1ce997682c0c331c8387bcf292034
+                fd63e088b8dc269926cf568ee83daeb6fdc908
+            4c/
+                27ade1d73d8bae7026734200a98da7743bbf09
             4e/
+                74a224c9d75b647ccd4abda6dcbd0a38417a02
                 d929f1be531f059b037e8f1a28c3344424dc62
             51/
                 28b9b7e39c8cec6e75f3765cac1411f9111d10
@@ -86,6 +116,8 @@ heart_disease_prediction/
                 3d51a0c48148717ccde039f11997b39f8ba7ea
             57/
                 8280222413b86ade55efbc715bc9990f1c878d
+            58/
+                b601e32d77ca3841c0d62aab7f98f80728dcd2
             66/
                 4900a980b73552d54e40dea44880d283e16b73
             67/
@@ -93,6 +125,8 @@ heart_disease_prediction/
             71/
                 e14b00c7b3438f13297d1ab04f89db072cff13
                 e2cda8c620e228c24755dfb8bdfde8f6193b82
+            75/
+                473901d26b3af379707f217b73fbcc90d11864
             76/
                 e7430175cd0df5842b9c1c37f1579eb5662070
             77/
@@ -112,11 +146,18 @@ heart_disease_prediction/
                 8a68ae7e70a1b6c886bdac9048ce2e6848c54d
             90/
                 b4ac85ad0b3b2ec50939b99daa9a3aa864b2ac
+            96/
+                9dbce847c04e096d4916456f2fdff36a8dc8a4
             98/
                 0d4bd93b76dcfbf91a7943ae8d495e085158a5
+                bb89bd8ad8759b65bc2ec5a3415a331eb044d6
             99/
                 895812e92b9212e8c3cbeecbbe530ec97aee16
+            9c/
+                95ab1592660259da1bd8444fae824df19482d6
             9d/
+                235f43c761e59f4fa8596ad161afd96b83abbd
+                7d377f5186cc5f2d9790c0eb81db685cc16324
                 bcf924ed2c2c39fb9acc6fc46f724c1bdc31dd
             a3/
                 3d81f8eafa582133a091108ddbe5ede06bc620
@@ -126,17 +167,36 @@ heart_disease_prediction/
                 62bbebf9705a4e577063afbc635aba3d12cfca
             a8/
                 caf4b7b39919d7a9884a68870da36196195962
+            a9/
+                10d35f25fc2920c2c817929a6645c829442535
+            aa/
+                d855995a7b8a85f2faf6ade88d21cdda98fad0
             ae/
                 2057e00a305c124f212a1caa2627c253e6f9f9
+                bf048ac1ab19f5d1cce696ed0c29f7b1e8cc72
+            b7/
+                80b217a926fc85f5b3b5886252ed56ca7bb99b
+                a9764e7fdae38e8c62040495fb41a1c7cfed94
             b8/
                 cda1ca94d9ea5a64187f35f8c0cac7f0ae2d17
+            bb/
+                fa4724b662115d2d614c4287d2cde4e232a659
+            c0/
+                711bb7653119cef4a104beabb888d2c8c75a64
+            c1/
+                7cfba6e32d49fae1ba6f719a8f9206d2f3a644
             c6/
                 7bf2b520b5aa1ec949d0ab6d072fee84485dc7
+            c8/
+                f4713722b94a128fda22b35d976c67beb2a864
             cb/
                 c766314b7bc7a425ac56b156be1657a361ea3d
                 e835f7241caecbce1c2f0a4cc1368691c84d43
             cc/
+                66bd684dc974146073a30aab33fc1b72fcb653
                 e0f152952a367bf9847f95ea2a2bb356ab43dc
+            ce/
+                fef0b7373fdb925fbb3a4b225fb79c7037ea43
             cf/
                 205743c354c236590119bda61e67fbbb476f81
                 30ac8c1b43783c72d1c522f1a99daf51951632
@@ -147,6 +207,8 @@ heart_disease_prediction/
                 cfc1e5c8a828b8a954e58267b3f98a3965bb9c
             d8/
                 43f340d228380d0809b446083dfc066e5de60a
+            d9/
+                9e30bca195625ac75b8ce72367cd6f291189e3
             da/
                 2e6814e3da2a12429402e7f1e90f10b8bb9a7e
             db/
@@ -158,17 +220,25 @@ heart_disease_prediction/
                 dc7b71535df9af2d779a29f553d33b63823389
             e0/
                 454fb5f5b79ba5f674c9dd5027cdd246ca31c6
+            e1/
+                c8d4b1dd20a5cfc4a70cf5b6e1c7bc62f53bdf
             e2/
                 4afff45e450713f8184c54b5a6a4815b2ece1b
             e6/
                 9de29bb2d1d6434b8b29ae775ad8c2e48c5391
                 de0442b8f80268dcbf62453d0b08a0daa27cd9
+            e8/
+                94ef0df958085a20b2ecbaf3379d0aacfbb21e
             eb/
                 3837b4a920fce7f9aba4e2deb434dc1e640275
             f0/
                 6f2283b5333b6560859a9c517f9fc2e3a5038c
+            f2/
+                f07bdb2b1752e73ae791c47a5dea586c7ef93c
             f5/
                 0dcdfe630456b5528d1c76e9f534a69a1585cf
+            f8/
+                bfa1d61f5ae93069722ed9f993091d2a5018c9
             fa/
                 1b462389b5ee072655e5680c73afa1f1a49f28
             fe/
@@ -195,35 +265,6 @@ heart_disease_prediction/
             Project_Default.xml
     .vscode/
         settings.json
-    app/
-        config.py
-        forms.py
-        models.py
-        routes.py
-        utils.py
-        __init__.py
-        static/
-            css/
-                style.css
-            images/
-                logo.png
-            js/
-                script.js
-        templates/
-            about.html
-            base.html
-            index.html
-            predict.html
-            prediction_history.html
-            results.html
-            errors/
-                404.html
-                500.html
-        __pycache__/
-            forms.cpython-313.pyc
-            models.cpython-313.pyc
-            routes.cpython-313.pyc
-            __init__.cpython-313.pyc
     data/
         models/
             heart_disease_model.joblib
@@ -235,8 +276,9 @@ heart_disease_prediction/
             zimbabwe_heart_disease_data.csv
     database/
         heart_disease.db
+    frontend/
+        streamlit_app.py
     instance/
-        heart_disease.db
     mitigations/
         alembic.ini
         versions/
